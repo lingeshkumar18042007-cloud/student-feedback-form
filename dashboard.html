@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Feedback System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <h2>Admin Dashboard</h2>
+        <div>
+            <a href="{{ url_for('index') }}">Feedback Form</a>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Submissions</h3>
+                <div class="value">{{ total_feedbacks }}</div>
+            </div>
+            <div class="stat-card" style="background-color: var(--secondary-color);">
+                <h3>Average Overall Rating</h3>
+                <div class="value">{{ average_rating }} / 5</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 style="margin-bottom: 1.5rem;">Submitted Feedback</h2>
+            
+            <form action="{{ url_for('dashboard') }}" method="GET" class="search-bar">
+                <input type="text" name="search" class="form-control" placeholder="Search by Student ID, Department, Subject, or Faculty..." value="{{ search_query }}">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <a href="{{ url_for('dashboard') }}" class="btn" style="background-color: #6c757d; color: white;">Clear</a>
+            </form>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Student ID</th>
+                            <th>Dept / Year</th>
+                            <th>Subject</th>
+                            <th>Faculty</th>
+                            <th>Overall Rating</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feedback in feedbacks %}
+                        <tr>
+                            <td>{{ feedback.created_at[:10] }}</td>
+                            <td>{{ feedback.student_id }}<br><small>{{ feedback.student_name }}</small></td>
+                            <td>{{ feedback.department }}<br><small>Yr: {{ feedback.year }}, Sem: {{ feedback.semester }}</small></td>
+                            <td>{{ feedback.subject }}</td>
+                            <td>{{ feedback.faculty_name }}</td>
+                            <td><strong>{{ feedback.overall_rating }}</strong> / 5</td>
+                            <td>
+                                <form action="{{ url_for('delete_feedback', id=feedback.id) }}" method="POST" class="delete-form" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 2rem;">No feedback records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

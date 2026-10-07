@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Feedback System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <h2>University Portal</h2>
+        <div>
+            <a href="{{ url_for('index') }}">Feedback Form</a>
+            <a href="{{ url_for('dashboard') }}">Admin Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="card">
+            <h2 style="margin-bottom: 1.5rem; text-align: center; color: var(--primary-color);">Student Feedback Form</h2>
+            <form id="feedbackForm" action="{{ url_for('index') }}" method="POST">
+                
+                <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Student Details</h3>
+                <div class="rating-group">
+                    <div class="form-group">
+                        <label for="student_name">Student Name *</label>
+                        <input type="text" id="student_name" name="student_name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="student_id">Student ID / Roll Number *</label>
+                        <input type="text" id="student_id" name="student_id" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department *</label>
+                        <input type="text" id="department" name="department" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="year">Year *</label>
+                        <select id="year" name="year" class="form-control" required>
+                            <option value="">Select Year</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="semester">Semester *</label>
+                        <select id="semester" name="semester" class="form-control" required>
+                            <option value="">Select Semester</option>
+                            <option value="1">1st Semester</option>
+                            <option value="2">2nd Semester</option>
+                            <option value="3">3rd Semester</option>
+                            <option value="4">4th Semester</option>
+                            <option value="5">5th Semester</option>
+                            <option value="6">6th Semester</option>
+                            <option value="7">7th Semester</option>
+                            <option value="8">8th Semester</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h3 style="margin: 2rem 0 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Course & Faculty Details</h3>
+                <div class="rating-group">
+                    <div class="form-group">
+                        <label for="subject">Subject *</label>
+                        <input type="text" id="subject" name="subject" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="faculty_name">Faculty Name *</label>
+                        <input type="text" id="faculty_name" name="faculty_name" class="form-control" required>
+                    </div>
+                </div>
+
+                <h3 style="margin: 2rem 0 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Ratings (1-5)</h3>
+                <p style="margin-bottom: 1rem; font-size: 0.9rem; color: #666;">1 = Poor, 5 = Excellent</p>
+                <div class="rating-group">
+                    <div class="form-group">
+                        <label for="teaching_quality">Teaching Quality *</label>
+                        <input type="number" id="teaching_quality" name="teaching_quality" class="form-control" min="1" max="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject_understanding">Subject Understanding *</label>
+                        <input type="number" id="subject_understanding" name="subject_understanding" class="form-control" min="1" max="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="communication">Communication Skills *</label>
+                        <input type="number" id="communication" name="communication" class="form-control" min="1" max="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="course_content">Course Content *</label>
+                        <input type="number" id="course_content" name="course_content" class="form-control" min="1" max="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="overall_rating">Overall Rating *</label>
+                        <input type="number" id="overall_rating" name="overall_rating" class="form-control" min="1" max="5" required>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="comments">Additional Comments (Optional)</label>
+                    <textarea id="comments" name="comments" class="form-control" rows="4"></textarea>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary" style="width: 100%; max-width: 300px;">Submit Feedback</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ensure correct script path by using url_for if this block gets converted -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
